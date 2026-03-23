@@ -3,177 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Farol Tech & Negocios | Innovación y Mercados RD</title>
+    <title>Farol Tech & Negocios | El Toro de la Economía</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --negro-fondo: #0a0a0b;
-            --negro-card: #141418;
-            --azul-electrico: #007BFF;
-            --texto-gris: #a8a8a8;
-            --blanco-hueso: #ede8df;
-        }
-
-        body {
-            background-color: var(--negro-fondo);
-            color: var(--blanco-hueso);
-            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background: linear-gradient(to bottom, #000, var(--negro-fondo));
-            padding: 20px;
-            text-align: center;
-            border-bottom: 2px solid var(--azul-electrico);
-        }
-
-        .logo-tech {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--blanco-hueso);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .logo-tech span {
-            color: var(--azul-electrico);
-        }
-
-        .hero-toro {
-            width: 100%;
-            height: 250px;
-            background: url('https://images.pexels.com/photos/1726074/pexels-photo-1726074.jpeg') center/cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .hero-overlay {
-            position: absolute;
-            background: rgba(0,0,0,0.6);
-            width: 100%;
-            height: 100%;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-        }
-
-        .hero-content h1 {
-            font-size: 28px;
-            margin: 0;
-            text-shadow: 2px 2px 10px rgba(0,0,0,1);
-        }
-
-        .container {
-            padding: 20px;
-            max-width: 1200px;
-            margin: auto;
-        }
-
-        .grid-noticias {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: var(--negro-card);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #222;
-            transition: 0.3s;
-        }
-
-        .card:hover {
-            border-color: var(--azul-electrico);
-        }
-
-        .card-img {
-            width: 100%;
-            height: 180px;
-            background-size: cover;
-            background-position: center;
-        }
-
-        .card-body {
-            padding: 15px;
-        }
-
-        .card-tag {
-            color: var(--azul-electrico);
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .card-title {
-            font-size: 18px;
-            margin: 0 0 10px 0;
-            line-height: 1.4;
-        }
-
-        .card-desc {
-            color: var(--texto-gris);
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        footer {
-            text-align: center;
-            padding: 40px;
-            color: var(--texto-gris);
-            font-size: 12px;
-            border-top: 1px solid #222;
-        }
+        body { background-color: #0a0a0a; color: #e5e5e5; }
+        .ads-placeholder { background: #1a1a1a; border: 1px dashed #333; height: 90px; display: flex; align-items: center; justify-content: center; margin: 20px 0; }
     </style>
 </head>
 <body>
-
-    <header>
-        <div class="logo-tech">FAROL <span>TECH</span></div>
+    <header class="p-6 border-b border-gray-800 flex justify-between items-center bg-black sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <img src="/static/logo-tech.png" alt="Toro" class="w-12">
+            <h1 class="text-2xl font-bold text-white uppercase tracking-widest">Farol <span class="text-blue-500">Tech</span></h1>
+        </div>
+        <nav class="hidden md:flex gap-6 text-sm font-semibold uppercase">
+            <a href="#" class="hover:text-blue-500">Tecnología</a>
+            <a href="#" class="hover:text-blue-500">Economía</a>
+            <a href="#" class="hover:text-blue-500">Mercados</a>
+        </nav>
     </header>
 
-    <section class="hero-toro">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1>Mercados, IA y Futuro Digital</h1>
-        </div>
-    </section>
+    <main class="max-w-6xl mx-auto p-4">
+        <div class="ads-placeholder font-mono text-xs text-gray-600">ANUNCIO ADSENSE SUPERIOR</div>
 
-    <div class="container">
-        <h2 style="border-left: 4px solid var(--azul-electrico); padding-left: 15px;">Últimos Movimientos</h2>
-        <div class="grid-noticias" id="noticias-container">
-            <div class="card">
-                <div class="card-img" style="background-image: url('https://images.pexels.com/photos/6770610/pexels-photo-6770610.jpeg');"></div>
-                <div class="card-body">
-                    <span class="card-tag">Negocios</span>
-                    <h3 class="card-title">Bitcoin alcanza nuevos máximos en el mercado dominicano</h3>
-                    <p class="card-desc">El interés por las criptomonedas crece entre los inversionistas locales tras la estabilidad del mercado global.</p>
-                </div>
-            </div>
-            
-            <div class="card">
-                <div class="card-img" style="background-image: url('https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg');"></div>
-                <div class="card-body">
-                    <span class="card-tag">Tecnología</span>
-                    <h3 class="card-title">IA generativa revoluciona las startups en Santo Domingo</h3>
-                    <p class="card-desc">Nuevas empresas tecnológicas están implementando soluciones de IA para optimizar procesos comerciales.</p>
-                </div>
-            </div>
-        </div>
-    </div>
+        <section id="noticias" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
+            </section>
 
-    <footer>
-        <p>&copy; 2026 Farol Tech & Negocios RD. Una división de El Farol al Día.</p>
-        <p>Símbolo del Toro: Fuerza y Crecimiento Alcista.</p>
+        <div class="ads-placeholder font-mono text-xs text-gray-600">ANUNCIO ADSENSE INFERIOR</div>
+    </main>
+
+    <footer class="p-10 border-t border-gray-800 mt-10 text-center text-gray-500 text-sm">
+        <p>© 2026 Farol Tech & Negocios. Grupo Farol.</p>
     </footer>
 
+    <script>
+        async function cargarNoticias() {
+            const res = await fetch('/api/noticias');
+            const noticias = await res.json();
+            const container = document.getElementById('noticias');
+            
+            if(noticias.length === 0) {
+                container.innerHTML = "<p class='col-span-full text-center py-10'>🐂 El Toro está preparando las noticias de hoy...</p>";
+                return;
+            }
+
+            container.innerHTML = noticias.map(n => `
+                <article class="bg-[#111] border border-gray-800 rounded-lg overflow-hidden hover:border-blue-500 transition">
+                    <div class="p-6">
+                        <span class="text-blue-500 text-xs font-bold uppercase">${n.categoria || 'Actualidad'}</span>
+                        <h2 class="text-xl font-bold mt-2 leading-tight">${n.titulo}</h2>
+                        <p class="text-gray-400 text-sm mt-3">${n.resumen}</p>
+                        <button class="mt-4 text-white font-bold border-b-2 border-blue-500 pb-1 text-sm">Leer más</button>
+                    </div>
+                </article>
+            `).join('');
+        }
+        cargarNoticias();
+    </script>
 </body>
 </html>
