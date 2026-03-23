@@ -1,4 +1,14 @@
-node_modules
+# Ignorar la carpeta de librerías (Railway la instala sola)
+node_modules/
+
+# Ignorar archivos de registro de errores
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignorar variables de entorno personales
 .env
-npm-debug.log
+
+# Ignorar archivos temporales del sistema
 .DS_Store
+Thumbs.db
