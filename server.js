@@ -1,5 +1,5 @@
 /**
- * 🐂 FAROL TECH & NEGOCIOS — V1.0 (CONEXIÓN TOTAL)
+ * 🐂 FAROL TECH & NEGOCIOS — ESTRATEGIA MONETIZACIÓN 2026
  * --------------------------------------------------------
  */
 
@@ -12,13 +12,13 @@ const path      = require('path');
 const app      = express();
 const PORT     = process.env.PORT || 8080;
 
-// 🔗 CONEXIÓN AUTOMÁTICA (Usa la variable que Railway genera sola)
+// 🔗 CONEXIÓN AUTOMÁTICA
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false }
 });
 
-// 🛠️ FUNCIÓN: CREAR TABLA SOLA (Si no existe)
+// 🛠️ AUTO-CREACIÓN DE TABLAS (SEO Ready)
 async function autoConfigurarDB() {
     const sql = `
         CREATE TABLE IF NOT EXISTS articulos (
@@ -28,19 +28,17 @@ async function autoConfigurarDB() {
             resumen TEXT,
             contenido_html TEXT,
             tags TEXT,
-            imagen_url TEXT,
+            categoria TEXT,
             fecha_publicacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
     `;
     try {
         await pool.query(sql);
-        console.log("✅ El Toro encontró (o creó) su base de datos automáticamente.");
-    } catch (err) {
-        console.error("❌ Error de auto-conexión:", err.message);
-    }
+        console.log("✅ Base de datos conectada y lista para AdSense.");
+    } catch (err) { console.error("❌ Error DB:", err.message); }
 }
 
-// 🔑 GEMINI CON TUS 2 KEYS
+// 🔑 INTELIGENCIA ARTIFICIAL (ROTACIÓN DE 2 KEYS)
 async function llamarIA(prompt) {
     const keys = [process.env.GEMINI_API_KEY, process.env.GEMINI_KEY_2].filter(Boolean);
     const keyActual = (new Date().getHours() % 2 === 0) ? keys[0] : (keys[1] || keys[0]);
@@ -52,32 +50,49 @@ async function llamarIA(prompt) {
     } catch (e) { return null; }
 }
 
-// 🐂 PUBLICACIÓN PROGRAMADA (Cada 8 horas)
-async function publicarNoticia() {
-    const prompt = `Escribe una noticia tech/economía de RD en JSON: {"titulo":"...","resumen":"...","contenido":"..."}`;
-    const respuesta = await llamarIA(prompt);
+// 🐂 EL TORO BUSCANDO TEMAS DE ALTO VALOR (MONETIZACIÓN)
+async function publicarNoticiaEstrategica() {
+    console.log("🐂 El Toro analizando tendencias de alto CPC...");
+    
+    // Instrucción Maestra para monetizar
+    const promptSEO = `Actúa como un experto en SEO y Finanzas. 
+    Genera un artículo de alto valor para Google AdSense sobre tecnología o economía en 2026.
+    Temas preferidos: Inteligencia Artificial en banca, Cripto-activos en RD, o Inversiones Tech.
+    
+    RESPONDE SOLO EN JSON:
+    {
+      "titulo": "Un título llamativo con palabras clave",
+      "resumen": "Un párrafo que enganche al lector",
+      "contenido": "Mínimo 5 párrafos con subtítulos HTML (h2), datos técnicos y análisis profundo",
+      "categoria": "Tecnología/Economía",
+      "tags": "separados, por, coma"
+    }`;
+
+    const respuesta = await llamarIA(promptSEO);
     if (!respuesta) return;
 
     try {
         const data = JSON.parse(respuesta);
         const slug = data.titulo.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        
         await pool.query(
-            `INSERT INTO articulos (titulo, slug, resumen, contenido_html) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING`,
-            [data.titulo, slug, data.resumen, data.contenido]
+            `INSERT INTO articulos (titulo, slug, resumen, contenido_html, categoria, tags) 
+             VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT DO NOTHING`,
+            [data.titulo, slug, data.resumen, data.contenido, data.categoria, data.tags]
         );
-        console.log("🐂 Noticia publicada: " + data.titulo);
-    } catch (e) { console.log("❌ Error al guardar."); }
+        console.log("💰 Artículo monetizable publicado: " + data.titulo);
+    } catch (e) { console.log("❌ Error procesando JSON de Gemini."); }
 }
 
-// ⏱️ TIEMPOS DEL TORO
-cron.schedule('0 */8 * * *', () => publicarNoticia());
+// ⏱️ PROGRAMACIÓN (CADA 8 HORAS) - Para no parecer spam
+cron.schedule('0 */8 * * *', () => publicarNoticiaEstrategica());
 
-// 🌐 RUTAS PÚBLICAS
+// 🌐 RUTAS
 app.use(express.static(path.join(__dirname, 'client')));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'client', 'index.html')));
 
-// 🚀 ENCENDIDO
+// 🚀 LANZAMIENTO
 app.listen(PORT, '0.0.0.0', async () => {
-    console.log(`🚀 Motor Farol Tech en puerto ${PORT}`);
-    await autoConfigurarDB(); // <--- Aquí ocurre la magia automática
+    console.log(`🚀 Farol Tech Online en Puerto ${PORT}`);
+    await autoConfigurarDB();
 });
