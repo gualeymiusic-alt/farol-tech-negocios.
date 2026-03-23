@@ -1,26 +1,29 @@
 /**
- * 🐂 FAROL TECH & NEGOCIOS — ESTRATEGIA MONETIZACIÓN 2026
- * --------------------------------------------------------
+ * 🐂 FAROL TECH & NEGOCIOS — V1.0 (LIMPIO)
  */
-const express   = require('express');
-const { Pool }  = require('pg');
-const cron      = require('node-cron');
-const { GoogleGenerativeAI } = require('@google-ai/generativai');
-const path      = require('path');
+const express = require('express');
+const { Pool } = require('pg');
+const cron = require('node-cron');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+const path = require('path');
+const cors = require('cors');
 
-const app      = express();
-const PORT     = process.env.PORT || 8080;
+const app = express();
+const PORT = process.env.PORT || 8080;
 
-// ✅ RUTA DE SALUD (Arregla el Healthcheck failed de Railway)
+app.use(cors());
+app.use(express.json());
+
+// ✅ SALUD PARA RAILWAY
 app.get('/health', (req, res) => { res.status(200).send('OK'); });
 
-// 🔗 CONEXIÓN AUTOMÁTICA A POSTGRES
+// 🔗 DB
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false }
 });
 
-// 🛠️ AUTO-CONFIGURACIÓN (Crea la tabla solo si no existe)
+// 🛠️ AUTO-TABLAS
 async function autoConfigurarDB() {
     const sql = `
         CREATE TABLE IF NOT EXISTS articulos (
@@ -36,11 +39,11 @@ async function autoConfigurarDB() {
     `;
     try {
         await pool.query(sql);
-        console.log("✅ Base de datos lista para facturar.");
+        console.log("✅ DB Lista");
     } catch (err) { console.error("❌ Error DB:", err.message); }
 }
 
-// 🔑 INTELIGENCIA ARTIFICIAL (ROTACIÓN DE 2 LLAVES)
+// 🔑 IA
 async function llamarIA(prompt) {
     const keys = [process.env.GEMINI_API_KEY, process.env.GEMINI_KEY_2].filter(Boolean);
     const keyActual = (new Date().getHours() % 2 === 0) ? keys[0] : (keys[1] || keys[0]);
@@ -52,29 +55,37 @@ async function llamarIA(prompt) {
     } catch (e) { return null; }
 }
 
-// 💰 GENERADOR DE ARTÍCULOS PARA ADSENSE (CADA 8 HORAS)
-async function publicarNoticiaEstrategica() {
-    const promptSEO = `Actúa como experto en Finanzas y SEO. Escribe un artículo de alto valor sobre tecnología o economía dominicana en 2026 para Google AdSense. 
-    Responde SOLO en JSON: {"titulo":"...","resumen":"...","contenido":"(usa h2 y p)","categoria":"...","tags":"..."}`;
-
+// 💰 PUBLICAR
+async function publicarNoticia() {
+    const promptSEO = `Escribe un articulo SEO tech/economia RD 2026. JSON: {"titulo":"...","resumen":"...","contenido":"...","categoria":"...","tags":"..."}`;
     const respuesta = await llamarIA(promptSEO);
     if (!respuesta) return;
-
     try {
-        const data = JSON.parse(respuesta);
+        const cleanRes = respuesta.replace(/```json|```/g, "").trim();
+        const data = JSON.parse(cleanRes);
         const slug = data.titulo.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         await pool.query(
-            `INSERT INTO articulos (titulo, slug, resumen, contenido_html, categoria, tags) 
-             VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT DO NOTHING`,
+            "INSERT INTO articulos (titulo, slug, resumen, contenido_html, categoria, tags) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT DO NOTHING",
             [data.titulo, slug, data.resumen, data.contenido, data.categoria, data.tags]
         );
-        console.log("🐂 Noticia Monetizable Publicada: " + data.titulo);
-    } catch (e) { console.log("❌ Error en JSON"); }
+        console.log("💰 Publicada: " + data.titulo);
+    } catch (e) { console.log("❌ Error JSON"); }
 }
 
-cron.schedule('0 */8 * * *', () => publicarNoticiaEstrategica());
+cron.schedule('0 */8 * * *', () => publicarNoticia());
 
-// 🌐 RUTAS WEB
-app.use(express.static(path.join(__dirname, 'client')));
+// 🌐 API CORREGIDA (Aquí estaba el error de sintaxis)
 app.get('/api/noticias', async (req, res) => {
-    const result = await pool.query('SELECT * FROM articulos ORDER BY fecha_
+    try {
+        const result = await pool.query("SELECT * FROM articulos ORDER BY fecha_publicacion DESC LIMIT 6");
+        res.json(result.rows);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.use(express.static(path.join(__dirname, 'client')));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'client', 'index.html')));
+
+app.listen(PORT, '0.0.0.0', async () => {
+    console.log(`🚀 Puerto ${PORT}`);
+    await autoConfigurarDB();
+});
