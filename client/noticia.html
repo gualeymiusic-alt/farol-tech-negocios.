@@ -3,67 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{TITULO}} | Farol Tech & Negocios</title>
-    <style>
-        :root {
-            --fondo: #0a0a0b;
-            --card: #141418;
-            --azul: #007BFF;
-            --blanco: #ede8df;
-            --gris: #a8a8a8;
-        }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--fondo); color: var(--blanco); margin: 0; padding: 0; line-height: 1.8; }
-        
-        header { background: #000; padding: 15px; text-align: center; border-bottom: 2px solid var(--azul); }
-        .logo { font-weight: bold; letter-spacing: 2px; font-size: 22px; color: var(--blanco); text-decoration: none; }
-        .logo span { color: var(--azul); }
-
-        .container { max-width: 800px; margin: 30px auto; padding: 20px; }
-        
-        .categoria-tag { background: var(--azul); color: #fff; padding: 5px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; text-transform: uppercase; }
-        
-        h1 { font-size: 32px; margin: 20px 0; line-height: 1.3; color: var(--blanco); }
-        
-        .meta-info { color: var(--gris); font-size: 14px; margin-bottom: 25px; border-bottom: 1px solid #222; padding-bottom: 15px; }
-
-        .noticia-img { width: 100%; border-radius: 12px; border: 1px solid #333; }
-        
-        .caption { font-size: 13px; color: var(--gris); margin-top: 8px; text-align: right; font-style: italic; }
-        .atribucion { font-size: 11px; color: #555; text-align: right; }
-
-        .contenido { font-size: 19px; color: #ccc; margin-top: 30px; }
-        .contenido p { margin-bottom: 25px; }
-
-        footer { background: var(--card); padding: 40px; text-align: center; margin-top: 50px; border-top: 1px solid #222; }
-    </style>
+    <title>Noticia | Farol Tech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-
-    <header>
-        <a href="/" class="logo">FAROL <span>TECH</span></a>
-    </header>
-
-    <article class="container">
-        <span class="categoria-tag">{{SECCION}}</span>
-        <h1>{{TITULO}}</h1>
-        
-        <div class="meta-info">
-            Por <strong>{{REDACTOR}}</strong> | {{FECHA}} | 👁️ {{VISTAS}} vistas
+<body class="bg-[#0a0a0a] text-gray-200">
+    <nav class="p-6 border-b border-gray-800 bg-black">
+        <a href="/" class="text-blue-500 font-bold">← VOLVER AL INICIO</a>
+    </nav>
+    <main class="max-w-4xl mx-auto p-6">
+        <div id="contenido-noticia" class="mt-10">
+            <p class="text-center py-20">Cargando análisis del Toro... 🐂</p>
         </div>
+        <div class="h-60 bg-[#111] border border-dashed border-gray-700 my-10 flex items-center justify-center text-xs text-gray-600">ANUNCIO ADSENSE DENTRO DE NOTICIA</div>
+    </main>
 
-        <img src="{{IMAGEN}}" alt="{{ALT}}" class="noticia-img">
-        <div class="caption">{{CAPTION}}</div>
-        <div class="atribucion">Licencia: {{LICENCIA_FOTO}}</div>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const slug = params.get('v');
 
-        <div class="contenido">
-            {{CONTENIDO}}
-        </div>
-    </article>
-
-    <footer>
-        <p>Farol Tech & Negocios RD - La fuerza del toro en la economía digital.</p>
-        <p style="font-size: 11px; color: #444;">jose.colorvision@gmail.com | Santo Domingo Este</p>
-    </footer>
-
+        async function cargarDetalle() {
+            const res = await fetch(`/api/noticia/${slug}`);
+            const n = await res.json();
+            document.getElementById('contenido-noticia').innerHTML = `
+                <span class="text-blue-500 font-bold uppercase text-sm">${n.categoria}</span>
+                <h1 class="text-4xl font-extrabold text-white mt-2 leading-tight">${n.titulo}</h1>
+                <div class="mt-8 prose prose-invert max-w-none text-lg leading-relaxed">
+                    ${n.contenido_html}
+                </div>
+            `;
+            document.title = n.titulo + " | Farol Tech";
+        }
+        if(slug) cargarDetalle();
+    </script>
 </body>
 </html>
