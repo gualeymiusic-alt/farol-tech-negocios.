@@ -1,16 +1,29 @@
-{
-  "name": "farol-x-solution",
+ç{
+  "name": "farol-tech-negocios",
   "version": "1.0.0",
+  "description": "Portal de Tecnología y Negocios - Repositorio Hermano EFD",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "postinstall": "npx playwright install chromium --with-deps"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "tech",
+    "negocios",
+    "rd",
+    "noticias"
+  ],
+  "author": "Jose Gregorio Mañan Santana",
+  "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
-    "playwright": "^1.40.0",
-    "playwright-extra": "^4.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2",
-    "pg": "^8.11.3"
+    "cors": "^2.8.5",
+    "pg": "^8.11.3",
+    "sharp": "^0.32.6",
+    "node-cron": "^3.0.3",
+    "rss-parser": "^3.13.0",
+    "crypto": "^1.0.1",
+    "cookie-parser": "^1.4.6",
+    "node-fetch": "^2.7.0"
   }
 }
