@@ -1,11 +1,10 @@
-ç{
+{
   "name": "farol-tech-negocios",
   "version": "1.0.0",
   "description": "Portal de Tecnología y Negocios - Repositorio Hermano EFD",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "keywords": [
     "tech",
