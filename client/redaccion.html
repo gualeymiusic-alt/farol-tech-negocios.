@@ -1,55 +1,406 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitor de Redacción | Farol Tech</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>🐂 Panel — Farol Tech & Negocios</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:    #030805;
+  --bg2:   #060f07;
+  --bg3:   #0a180c;
+  --border:#0d2410;
+  --border2:#143318;
+  --green: #00e664;
+  --green2:#00b84e;
+  --gold:  #f0a500;
+  --red:   #ff4444;
+  --text:  #c8e6cc;
+  --text2: #6b9b72;
+  --text3: #3a5c3f;
+  --mono:  'IBM Plex Mono', monospace;
+  --sans:  'IBM Plex Sans', sans-serif;
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:var(--sans); min-height:100vh; padding:14px; max-width:640px; margin:0 auto; }
+
+header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border); }
+header h1 { font-family:var(--mono); font-size:14px; color:var(--green); }
+.ref-btn { background:none; border:1px solid var(--border); color:var(--text2); padding:5px 10px; border-radius:4px; font-size:11px; cursor:pointer; font-family:var(--mono); transition:all .2s; }
+.ref-btn:hover { border-color:var(--green); color:var(--green); }
+
+/* SEMÁFORO */
+#semaforo { display:flex; align-items:center; gap:12px; background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:14px 16px; margin-bottom:14px; cursor:pointer; }
+#sluz { width:14px; height:14px; border-radius:50%; flex-shrink:0; }
+.verde  { background:var(--green); box-shadow:0 0 10px #00e66488; animation:pulse 2s infinite; }
+.rojo   { background:var(--red); box-shadow:0 0 10px #ff444488; }
+.amarillo { background:var(--gold); box-shadow:0 0 10px #f0a50088; animation:pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:.35} }
+
+/* MÉTRICAS */
+.grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-bottom:14px; }
+.met { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center; }
+.met-lbl { font-family:var(--mono); font-size:8px; color:var(--text3); letter-spacing:2px; text-transform:uppercase; margin-bottom:4px; }
+.met-val { font-family:var(--mono); font-size:20px; font-weight:600; color:var(--green); line-height:1; }
+.ok{color:var(--green)!important} .warn{color:var(--gold)!important} .err{color:var(--red)!important}
+
+/* TABS */
+.tabs { display:flex; gap:3px; margin-bottom:10px; }
+.tab { flex:1; padding:7px; text-align:center; font-family:var(--mono); font-size:10px; border-radius:4px; cursor:pointer; border:1px solid var(--border); color:var(--text2); background:transparent; transition:all .2s; }
+.tab.active { background:var(--green); color:var(--bg); border-color:var(--green); }
+.tc { display:none; } .tc.active { display:block; }
+
+/* SECCIONES */
+.sec { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:14px; margin-bottom:10px; }
+.sec-tit { font-family:var(--mono); font-size:9px; color:var(--text3); text-transform:uppercase; letter-spacing:3px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; }
+.badge { background:var(--bg3); border:1px solid var(--border); padding:2px 8px; border-radius:10px; font-size:10px; }
+
+/* CHECKS */
+.chk { display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid var(--bg3); font-size:12px; }
+.chk:last-child { border-bottom:none; }
+.dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.dv{background:var(--green)} .dr{background:var(--red)} .da{background:var(--gold)}
+.lbl { flex:1; color:#9bba9e; }
+.cv { font-size:10px; font-family:var(--mono); }
+.cok{color:var(--green)} .cwn{color:var(--gold)} .cer{color:var(--red)}
+
+/* BOTONES */
+.bgrid2 { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:8px; }
+.bgrid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-bottom:8px; }
+.btn { background:var(--bg3); border:1px solid var(--border2); color:#bbb; padding:12px 8px; border-radius:6px; font-family:var(--mono); font-size:11px; cursor:pointer; text-align:center; display:flex; flex-direction:column; align-items:center; gap:4px; width:100%; transition:all .2s; }
+.btn:hover { background:var(--bg2); border-color:var(--green); color:var(--text); }
+.btn:active { transform:scale(.96); }
+.bi { font-size:16px; }
+.btn.sok:hover { border-color:var(--green); background:#0a1a0a; }
+.btn.sng:hover { border-color:var(--red); background:#1a0808; }
+
+/* ARTÍCULOS */
+.art-row { display:flex; gap:10px; align-items:flex-start; padding:8px 0; border-bottom:1px solid var(--bg3); }
+.art-row:last-child { border-bottom:none; }
+.art-num { font-family:var(--mono); font-size:10px; color:var(--text3); min-width:20px; margin-top:2px; }
+.art-body-inner { flex:1; }
+.art-tit { font-size:12px; color:#bbb; line-height:1.4; margin-bottom:3px; cursor:pointer; transition:color .2s; }
+.art-tit:hover { color:var(--green); }
+.art-meta-row { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+.art-cat { background:var(--bg3); border:1px solid var(--border); color:var(--gold); padding:1px 5px; border-radius:2px; font-family:var(--mono); font-size:9px; }
+.art-fecha { font-family:var(--mono); font-size:9px; color:var(--text3); }
+.art-vistas { font-family:var(--mono); font-size:9px; color:var(--green2); }
+.del-btn { background:none; border:1px solid var(--border); color:var(--text3); width:26px; height:26px; border-radius:4px; cursor:pointer; font-size:12px; flex-shrink:0; transition:all .2s; display:flex; align-items:center; justify-content:center; }
+.del-btn:hover { border-color:var(--red); color:var(--red); background:#1a0808; }
+
+/* LOG */
+#logbox { background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:10px; font-family:var(--mono); font-size:10px; color:var(--green); max-height:180px; overflow-y:auto; line-height:1.7; }
+.lw{color:var(--gold)} .le{color:var(--red)} .li{color:#60a5fa} .ls{color:#a78bfa}
+
+/* Misc */
+.loader { display:inline-block; width:10px; height:10px; border:2px solid var(--border2); border-top-color:var(--green); border-radius:50%; animation:spin .7s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.carg { display:flex; justify-content:center; padding:16px; }
+.prog-wrap { height:5px; background:var(--border); border-radius:3px; overflow:hidden; margin-top:5px; }
+.prog-fill { height:100%; border-radius:3px; transition:width .6s; }
+.live-dot { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
+#toast { position:fixed; bottom:14px; left:50%; transform:translateX(-50%); background:var(--bg2); border:1px solid var(--green); color:var(--text); padding:10px 18px; border-radius:6px; font-family:var(--mono); font-size:11px; display:none; z-index:999; max-width:90vw; text-align:center; }
+</style>
 </head>
-<body class="bg-gray-900 text-white p-4">
-    <div class="max-w-4xl mx-auto">
-        <header class="flex justify-between items-center my-6 border-b border-gray-700 pb-4">
-            <h1 class="text-2xl font-bold">🐂 Redacción Farol</h1>
-            <button onclick="location.href='/activar-toro'" class="bg-blue-600 px-4 py-2 rounded text-sm font-bold">Generar Noticia</button>
-        </header>
+<body>
 
-        <div class="bg-gray-800 rounded-lg shadow-xl overflow-hidden">
-            <table class="w-full text-left">
-                <thead class="bg-gray-700 text-xs uppercase text-gray-400">
-                    <tr>
-                        <th class="p-3">Título</th>
-                        <th class="p-3">Categoría</th>
-                        <th class="p-3">Acción</th>
-                    </tr>
-                </thead>
-                <tbody id="lista" class="text-sm">
-                    </tbody>
-            </table>
-        </div>
+<header>
+  <h1>🐂 Panel — Farol Tech V2.0</h1>
+  <div style="display:flex;gap:6px;align-items:center">
+    <span id="upd" style="font-family:var(--mono);font-size:10px;color:var(--text3)">—</span>
+    <button class="ref-btn" onclick="cargarTodo()">↻ Actualizar</button>
+    <a href="/" class="ref-btn" target="_blank">🌐 Portada</a>
+  </div>
+</header>
+
+<!-- SEMÁFORO -->
+<div id="semaforo" onclick="cargarTodo()">
+  <div id="sluz" class="amarillo"></div>
+  <div style="flex:1">
+    <div id="stit" style="font-size:13px;font-weight:600">Verificando...</div>
+    <div id="ssub" style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:2px">Conectando Railway</div>
+  </div>
+  <div id="sver" style="font-family:var(--mono);font-size:11px;color:var(--green)">—</div>
+</div>
+
+<!-- MÉTRICAS -->
+<div class="grid3">
+  <div class="met"><div class="met-lbl">Artículos</div><div class="met-val" id="m-total">—</div></div>
+  <div class="met"><div class="met-lbl">Vistas</div><div class="met-val" id="m-vistas">—</div></div>
+  <div class="met"><div class="met-lbl">Sin pub.</div><div class="met-val" id="m-min">—</div></div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="tab('salud')">🩺 Salud</button>
+  <button class="tab" onclick="tab('acciones')">⚙️ Acciones</button>
+  <button class="tab" onclick="tab('articulos')">📰 Artículos</button>
+  <button class="tab" onclick="tab('logs')">📋 Logs</button>
+</div>
+
+<!-- SALUD -->
+<div id="tc-salud" class="tc active">
+  <div class="sec">
+    <div class="sec-tit">Estado del sistema <span class="badge" id="bp" style="color:var(--green)">OK</span></div>
+    <div id="checks"><div class="carg"><div class="loader"></div></div></div>
+  </div>
+  <div class="sec">
+    <div class="sec-tit">Automatización <span class="live-dot"></span></div>
+    <div class="chk"><div class="dot dv"></div><span class="lbl">Publica automáticamente</span><span class="cv cok">1 artículo/hora</span></div>
+    <div class="chk"><div class="dot dv"></div><span class="lbl">Ráfaga al arrancar</span><span class="cv cok">3 artículos · 20 min c/u</span></div>
+    <div class="chk"><div class="dot dv"></div><span class="lbl">RSS 14 fuentes Tech+Eco</span><span class="cv cok">7:30 · 13:30 · 20:30</span></div>
+    <div class="chk"><div class="dot dv"></div><span class="lbl">Keep-alive Railway</span><span class="cv cok">Ping cada 5 min</span></div>
+    <div class="chk"><div class="dot dv"></div><span class="lbl">Sitemap.xml dinámico</span><span class="cv cok">Para Google News</span></div>
+    <div class="chk"><div class="dot dv"></div><span class="lbl">AdSense monetización</span><span class="cv cok" id="adsense-id">—</span></div>
+  </div>
+</div>
+
+<!-- ACCIONES -->
+<div id="tc-acciones" class="tc">
+  <div class="sec">
+    <div class="sec-tit">Publicar ahora</div>
+    <div class="bgrid2">
+      <button class="btn sok" onclick="acc('rss')"><span class="bi">📡</span>Procesar RSS</button>
+      <button class="btn sok" onclick="gen('Tecnología RD')"><span class="bi">✍️</span>Generar Tech</button>
     </div>
+    <div class="bgrid3">
+      <button class="btn" onclick="gen('Tecnología RD')"><span class="bi">🖥</span>Tech RD</button>
+      <button class="btn" onclick="gen('Economía RD')"><span class="bi">📊</span>Economía</button>
+      <button class="btn" onclick="gen('Finanzas Personales')"><span class="bi">💳</span>Finanzas</button>
+      <button class="btn" onclick="gen('Startups & Emprendimiento')"><span class="bi">🚀</span>Startups</button>
+      <button class="btn" onclick="gen('Mercados Internacionales')"><span class="bi">🌐</span>Mercados</button>
+      <button class="btn" onclick="gen('Innovación & Futuro')"><span class="bi">⚡</span>Innovación</button>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-tit">Links útiles</div>
+    <div class="bgrid2">
+      <button class="btn" onclick="window.open('/status','_blank')"><span class="bi">🔍</span>/status</button>
+      <button class="btn" onclick="window.open('/sitemap.xml','_blank')"><span class="bi">🗺</span>Sitemap</button>
+    </div>
+  </div>
+</div>
 
-    <script>
-        async function cargar() {
-            const res = await fetch('/api/admin/listado');
-            const noticias = await res.json();
-            document.getElementById('lista').innerHTML = noticias.map(n => `
-                <tr class="border-b border-gray-700">
-                    <td class="p-3 font-medium">${n.titulo}</td>
-                    <td class="p-3"><span class="bg-blue-900 px-2 py-1 rounded text-xs">${n.categoria}</span></td>
-                    <td class="p-3">
-                        <button onclick="borrar(${n.id})" class="text-red-500 font-bold">Borrar</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
+<!-- ARTÍCULOS -->
+<div id="tc-articulos" class="tc">
+  <div class="sec">
+    <div class="sec-tit">Publicados <span class="badge" id="bn" style="color:var(--green)">—</span></div>
+    <div id="lista-arts"><div class="carg"><div class="loader"></div></div></div>
+  </div>
+</div>
 
-        async function borrar(id) {
-            if(confirm('¿Seguro socio?')) {
-                await fetch(`/api/admin/borrar/${id}`, { method: 'DELETE' });
-                cargar();
-            }
-        }
-        cargar();
-    </script>
+<!-- LOGS -->
+<div id="tc-logs" class="tc">
+  <div class="sec">
+    <div class="sec-tit">Actividad <span class="live-dot"></span></div>
+    <div id="logbox"><span style="color:var(--text3)">Sin actividad aún.</span></div>
+  </div>
+  <div class="sec">
+    <div class="sec-tit">Info técnica</div>
+    <div id="tech-info"><div class="carg"><div class="loader"></div></div></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const AUTH = 'Basic ' + btoa('director:311');
+let tabActual = 'salud';
+let datosStatus = null;
+let ocupado = false;
+
+function toast(msg, ms = 3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  clearTimeout(t._to);
+  t._to = setTimeout(() => t.style.display = 'none', ms);
+}
+
+function log(msg, tipo = '') {
+  const box = document.getElementById('logbox');
+  if (box.querySelector('span')) box.innerHTML = '';
+  const d = new Date().toLocaleTimeString('es-DO', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+  const cls = tipo==='warn'?'lw':tipo==='error'?'le':tipo==='info'?'li':tipo==='success'?'ls':'';
+  box.innerHTML += `<div class="${cls}">[${d}] ${msg}</div>`;
+  box.scrollTop = box.scrollHeight;
+}
+
+async function api(ep, method='GET', body=null) {
+  try {
+    const opts = { method, headers: { 'Content-Type':'application/json', 'Authorization':AUTH } };
+    if (body) opts.body = JSON.stringify(body);
+    const r = await fetch(ep, opts);
+    return await r.json();
+  } catch(e) { return { error: e.message }; }
+}
+
+function tab(t) {
+  tabActual = t;
+  const nombres = ['salud','acciones','articulos','logs'];
+  document.querySelectorAll('.tab').forEach((b,i) => b.classList.toggle('active', nombres[i]===t));
+  document.querySelectorAll('.tc').forEach(c => c.classList.remove('active'));
+  document.getElementById('tc-'+t).classList.add('active');
+  if (t==='articulos') cargarArticulos();
+  if (t==='logs') cargarLogs();
+}
+
+function tiempoRel(fecha) {
+  const min = Math.round((Date.now() - new Date(fecha)) / 60000);
+  if (min < 1) return 'ahora';
+  if (min < 60) return min + 'min';
+  const h = Math.floor(min/60);
+  return h < 24 ? h+'h' : Math.floor(h/24)+'d';
+}
+
+function fmt(v) {
+  if (!v) return '0';
+  if (v>=1000000) return (v/1000000).toFixed(1)+'M';
+  if (v>=1000) return (v/1000).toFixed(1)+'k';
+  return String(v);
+}
+
+async function cargarStatus() {
+  const d = await api('/status');
+  datosStatus = d;
+  if (d.error || !d.version) {
+    document.getElementById('sluz').className = 'rojo';
+    document.getElementById('stit').textContent = 'Servidor no responde';
+    document.getElementById('ssub').textContent = d.error || '—';
+    log('SERVIDOR CAÍDO: ' + (d.error||'sin respuesta'), 'error');
+    return;
+  }
+  const min = d.min_sin_publicar || 0;
+  const critico = min > 120;
+  const alerta  = min > 70;
+  document.getElementById('sluz').className = critico ? 'rojo' : alerta ? 'amarillo' : 'verde';
+  document.getElementById('stit').textContent = critico ? 'Problema crítico' : alerta ? 'Sistema con alertas' : 'Sistema operando OK';
+  document.getElementById('ssub').textContent = d.articulos + ' artículos · última hace ' + min + 'min · ' + d.gemini_model;
+  document.getElementById('sver').textContent = 'V' + d.version;
+
+  const mMin = document.getElementById('m-min');
+  mMin.textContent = min;
+  mMin.className = 'met-val ' + (min>120?'err':min>70?'warn':'ok');
+  document.getElementById('adsense-id').textContent = d.adsense || '—';
+
+  const checks = [
+    { dot:min>120?'dr':min>70?'da':'dv', l:'Cadencia publicación', v:min>120?'⚠️ SIN PUBLICAR '+min+'min':min>70?min+'min sin publicar':'OK · última hace '+min+'min', c:min>120?'cer':min>70?'cwn':'cok' },
+    { dot:d.gemini_keys>=1?'dv':'dr', l:'Gemini ' + d.gemini_model, v:d.gemini_keys + ' llave(s) activa(s)', c:'cok' },
+    { dot:d.pexels?.includes('✅')?'dv':'da', l:'Pexels API — imágenes', v:d.pexels||'—', c:d.pexels?.includes('✅')?'cok':'cwn' },
+    { dot:'dv', l:'PostgreSQL', v:'Online', c:'cok' },
+    { dot:'dv', l:'Sitemap.xml', v:'Dinámico · Google News', c:'cok' },
+    { dot:'dv', l:'AdSense', v:d.adsense||'—', c:'cok' },
+  ];
+  const nA = checks.filter(c=>c.dot!=='dv').length;
+  const bp = document.getElementById('bp');
+  bp.textContent = nA>0 ? nA+' alerta'+(nA>1?'s':'') : 'Todo OK';
+  bp.style.color = nA>0 ? '#f0a500' : '#00e664';
+  document.getElementById('checks').innerHTML = checks.map(c=>
+    `<div class="chk"><div class="dot ${c.dot}"></div><span class="lbl">${c.l}</span><span class="cv ${c.c}">${c.v}</span></div>`
+  ).join('');
+  log('Status OK V'+d.version+' · '+d.articulos+' arts · '+min+'min sin publicar', 'info');
+}
+
+async function cargarEstadisticas() {
+  const d = await api('/api/estadisticas');
+  if (d.ok) {
+    document.getElementById('m-total').textContent = d.total;
+    document.getElementById('m-vistas').textContent = fmt(d.vistas);
+  }
+}
+
+async function cargarArticulos() {
+  const d = await api('/api/admin/listado');
+  if (!d.ok || !d.articulos?.length) {
+    document.getElementById('lista-arts').innerHTML = '<p style="font-family:var(--mono);font-size:11px;color:var(--text3);padding:12px 0">Sin artículos aún</p>';
+    document.getElementById('bn').textContent = '0';
+    return;
+  }
+  document.getElementById('bn').textContent = d.articulos.length;
+  document.getElementById('lista-arts').innerHTML = d.articulos.slice(0,20).map((a,i)=>
+    `<div class="art-row">
+      <div class="art-num">${i+1}</div>
+      <div class="art-body-inner">
+        <div class="art-tit" onclick="window.open('/articulo/${a.slug}','_blank')">${a.titulo}</div>
+        <div class="art-meta-row">
+          <span class="art-cat">${a.categoria}</span>
+          <span class="art-fecha">${tiempoRel(a.fecha_publicacion)}</span>
+          <span class="art-vistas">${a.vistas||0} lecturas</span>
+        </div>
+      </div>
+      <button class="del-btn" onclick="borrar(${a.id}, this)" title="Borrar">✕</button>
+    </div>`
+  ).join('');
+}
+
+async function cargarLogs() {
+  if (!datosStatus) return;
+  const d = datosStatus;
+  document.getElementById('tech-info').innerHTML =
+    `<div class="chk"><div class="dot dv"></div><span class="lbl">Versión</span><span class="cv cok">V${d.version}</span></div>`
+    +`<div class="chk"><div class="dot dv"></div><span class="lbl">Modelo IA</span><span class="cv cok">${d.gemini_model}</span></div>`
+    +`<div class="chk"><div class="dot dv"></div><span class="lbl">Cron</span><span class="cv cok">${d.cron||'—'}</span></div>`
+    +`<div class="chk"><div class="dot dv"></div><span class="lbl">RSS</span><span class="cv cok">${d.rss||'—'}</span></div>`
+    +`<div class="chk"><div class="dot dv"></div><span class="lbl">Categorías</span><span class="cv cok">${(d.categorias||[]).length} secciones</span></div>`
+    +`<div class="chk"><div class="dot dv"></div><span class="lbl">Artículos totales</span><span class="cv cok">${d.articulos}</span></div>`;
+}
+
+async function gen(cat) {
+  if (ocupado) { toast('Esperando operación anterior...'); return; }
+  ocupado = true;
+  toast('Generando ' + cat + '...');
+  log('Generando: ' + cat, 'info');
+  const r = await api('/api/admin/generar', 'POST', { categoria: cat });
+  ocupado = false;
+  if (r.ok) {
+    toast('✅ "' + r.titulo.substring(0,40) + '"', 5000);
+    log('✅ ' + r.titulo.substring(0,55), 'success');
+  } else {
+    toast('Error: ' + r.msg, 4000);
+    log('ERROR: ' + r.msg, 'error');
+  }
+  setTimeout(cargarTodo, 2000);
+}
+
+async function acc(tipo) {
+  if (ocupado) { toast('Esperando...'); return; }
+  ocupado = true;
+  toast('Procesando RSS...');
+  log('Procesando RSS...', 'info');
+  const r = await api('/api/admin/rss', 'POST');
+  ocupado = false;
+  toast(r.ok ? '✅ RSS iniciado' : '❌ Error RSS', 3000);
+  log(r.ok ? 'RSS iniciado OK' : 'ERROR RSS: '+r.msg, r.ok?'success':'error');
+}
+
+async function borrar(id, btn) {
+  if (!confirm('¿Borrar este artículo?')) return;
+  btn.textContent = '...';
+  const r = await api('/api/admin/borrar/' + id, 'DELETE');
+  if (r.ok) {
+    toast('✅ Artículo borrado');
+    log('Borrado ID: ' + id, 'warn');
+    await cargarArticulos();
+    await cargarEstadisticas();
+  } else {
+    toast('Error al borrar');
+    btn.textContent = '✕';
+  }
+}
+
+async function cargarTodo() {
+  document.getElementById('upd').textContent =
+    new Date().toLocaleTimeString('es-DO', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+  await cargarStatus();
+  await cargarEstadisticas();
+  if (tabActual==='articulos') await cargarArticulos();
+  if (tabActual==='logs') await cargarLogs();
+}
+
+cargarTodo();
+log('Panel Farol Tech V2.0 iniciado', 'info');
+setInterval(cargarTodo, 60000);
+</script>
 </body>
 </html>
