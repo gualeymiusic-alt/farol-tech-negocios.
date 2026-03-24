@@ -15,7 +15,25 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
 
 <!-- Google AdSense -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+<!-- AdSense — ID cargado dinámicamente desde /status para soportar múltiples proyectos -->
+<script>
+(async () => {
+  try {
+    const r = await fetch('/status');
+    const d = await r.json();
+    const pub = d.adsense || '';
+    if (!pub || pub.includes('XXXX')) return; // sin ID configurado aún
+    // Script principal de AdSense
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-' + pub;
+    s.crossOrigin = 'anonymous';
+    document.head.appendChild(s);
+    // Guardar pub ID globalmente para los bloques de anuncios
+    window._adsPub = 'ca-' + pub;
+  } catch(e) {}
+})();
+</script>
 
 <style>
 :root {
@@ -566,13 +584,14 @@ footer {
   <div>
     <div class="ad-label">PUBLICIDAD</div>
     <div class="ad-wrap">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-           data-ad-slot="1234567890"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      <div id="ad-top" style="min-height:90px;display:flex;align-items:center;justify-content:center"></div>
+      <script>
+      (function(){ const t=setInterval(()=>{if(!window._adsPub)return; clearInterval(t);
+        const d=document.getElementById('ad-top');
+        d.innerHTML='<ins class="adsbygoogle" style="display:block" data-ad-client="'+window._adsPub+'" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>';
+        try{(adsbygoogle=window.adsbygoogle||[]).push({});}catch(e){}
+      },300); setTimeout(()=>clearInterval(t),8000); })();
+      </script>
     </div>
   </div>
 
@@ -609,13 +628,14 @@ footer {
   <div>
     <div class="ad-label">PUBLICIDAD</div>
     <div class="ad-wrap">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-           data-ad-slot="0987654321"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      <div id="ad-mid" style="min-height:90px;display:flex;align-items:center;justify-content:center"></div>
+      <script>
+      (function(){ const t=setInterval(()=>{if(!window._adsPub)return; clearInterval(t);
+        const d=document.getElementById('ad-mid');
+        d.innerHTML='<ins class="adsbygoogle" style="display:block" data-ad-client="'+window._adsPub+'" data-ad-slot="0987654321" data-ad-format="auto" data-full-width-responsive="true"></ins>';
+        try{(adsbygoogle=window.adsbygoogle||[]).push({});}catch(e){}
+      },300); setTimeout(()=>clearInterval(t),8000); })();
+      </script>
     </div>
   </div>
 
