@@ -1,7 +1,5 @@
 /**
- * 🐂 FAROL TECH & NEGOCIOS — V1.0 (VERSIÓN REDACCIÓN PRO)
- * --------------------------------------------------------
- * MOTOR COMPLETO: IA + DB + SITEMAP + DIAGNÓSTICO
+ * 🐂 FAROL TECH & NEGOCIOS — V1.0 (VERSIÓN FINAL COMPLETA)
  */
 const express = require('express');
 const { Pool } = require('pg');
@@ -16,7 +14,7 @@ const PORT = process.env.PORT || 8080;
 app.use(cors());
 app.use(express.json());
 
-// ✅ RUTA DE SALUD (VITAL PARA RAILWAY)
+// ✅ SALUD PARA RAILWAY
 app.get('/health', (req, res) => { res.status(200).send('OK'); });
 
 // 🔗 CONEXIÓN A BASE DE DATOS
@@ -41,15 +39,14 @@ async function autoConfigurarDB() {
     `;
     try {
         await pool.query(sql);
-        console.log("✅ DB Conectada.");
+        console.log("✅ DB Lista.");
     } catch (err) { console.error("❌ Error DB:", err.message); }
 }
 
-// 🔑 MOTOR DE IA CON LIMPIADOR DE JSON
+// 🔑 LLAMADA A IA CON LIMPIEZA
 async function llamarIA(prompt) {
-    // Intenta usar la KEY 1, si no, la 2
-    const key = process.env.GEMINI_API_KEY || process.env.GEMINI_KEY_2;
-    if (!key) throw new Error("No hay API KEY configurada en Railway.");
+    let key = (process.env.GEMINI_API_KEY || "").trim();
+    if (!key) throw new Error("No hay llave configurada.");
 
     try {
         const genAI = new GoogleGenerativeAI(key);
@@ -57,20 +54,15 @@ async function llamarIA(prompt) {
         const result = await model.generateContent(prompt);
         const text = result.response.text();
         
-        // Extrae el JSON puro aunque Gemini responda con charla
         const inicio = text.indexOf('{');
         const fin = text.lastIndexOf('}') + 1;
-        if (inicio === -1) throw new Error("La IA no generó un formato válido.");
         return text.substring(inicio, fin);
-    } catch (e) {
-        throw new Error("Fallo de Google: " + e.message);
-    }
+    } catch (e) { throw e; }
 }
 
-// 💰 FUNCIÓN MAESTRA DE PUBLICACIÓN
+// 💰 PUBLICACIÓN MAESTRA
 async function publicarNoticia() {
     const promptSEO = `Escribe un artículo SEO sobre tecnología o economía dominicana 2026. Responde SOLO en JSON: {"titulo":"...","resumen":"...","contenido":"(usa h2 y p)","categoria":"...","tags":"..."}`;
-    
     try {
         const respuesta = await llamarIA(promptSEO);
         const data = JSON.parse(respuesta);
@@ -81,22 +73,17 @@ async function publicarNoticia() {
             [data.titulo, slug, data.resumen, data.contenido, data.categoria, data.tags]
         );
         return { ok: true };
-    } catch (e) {
-        return { ok: false, msg: e.message };
-    }
+    } catch (e) { return { ok: false, msg: e.message }; }
 }
 
 // ⏱️ PROGRAMACIÓN AUTOMÁTICA (CADA 8 HORAS)
 cron.schedule('0 */8 * * *', () => publicarNoticia());
 
-// 🚀 RUTAS DE ADMINISTRACIÓN (DIAGNÓSTICO)
+// 🚀 RUTAS DE ADMINISTRACIÓN
 app.get('/activar-toro', async (req, res) => {
     const resu = await publicarNoticia();
-    if (resu.ok) {
-        res.send('<h1>🐂 TORO ACTIVO</h1><p>Noticia creada.</p><a href="/redaccion.html">Volver</a>');
-    } else {
-        res.status(500).send(`<h1>❌ FALLO</h1><p><b>Detalle:</b> ${resu.msg}</p><a href="/redaccion.html">Reintentar</a>`);
-    }
+    if (resu.ok) res.send('<h1>🐂 TORO ACTIVO: NOTICIA CREADA</h1><a href="/redaccion.html">Volver al Monitor</a>');
+    else res.status(500).send(`<h1>❌ FALLO</h1><p>${resu.msg}</p>`);
 });
 
 app.get('/api/admin/listado', async (req, res) => {
@@ -109,7 +96,7 @@ app.delete('/api/admin/borrar/:id', async (req, res) => {
     res.json({ success: true });
 });
 
-// 📈 SITEMAP PARA SEARCH CONSOLE
+// 📈 SITEMAP PARA GOOGLE
 app.get('/sitemap.xml', async (req, res) => {
     const r = await pool.query("SELECT slug, fecha_publicacion FROM articulos");
     let xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
@@ -122,7 +109,7 @@ app.get('/sitemap.xml', async (req, res) => {
     res.send(xml);
 });
 
-// 🌐 API PÚBLICA PARA FRONTEND
+// 🌐 API PÚBLICA
 app.get('/api/noticias', async (req, res) => {
     const r = await pool.query("SELECT * FROM articulos ORDER BY fecha_publicacion DESC LIMIT 10");
     res.json(r.rows);
@@ -137,8 +124,8 @@ app.get('/api/noticia/:slug', async (req, res) => {
 app.use(express.static(path.join(__dirname, 'client')));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'client', 'index.html')));
 
-// 🚀 INICIO DEL SERVIDOR
+// 🚀 INICIO
 app.listen(PORT, '0.0.0.0', async () => {
     await autoConfigurarDB();
-    console.log(`🚀 Motor Farol en puerto ${PORT}`);
+    console.log(`🚀 Puerto ${PORT}`);
 });
