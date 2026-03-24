@@ -1,39 +1,406 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noticia | Farol Tech</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- META_TAGS -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-{{ADSENSE_PUB}}" crossorigin="anonymous"></script>
+<style>
+:root {
+  --bg:    #030805;
+  --bg2:   #060f07;
+  --bg3:   #0a180c;
+  --border:#0d2410;
+  --green: #00e664;
+  --green2:#00b84e;
+  --gold:  #f0a500;
+  --text:  #c8e6cc;
+  --text2: #6b9b72;
+  --text3: #3a5c3f;
+  --mono:  'IBM Plex Mono', monospace;
+  --sans:  'IBM Plex Sans', sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.7; }
+
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:0;
+  opacity:.4;
+}
+
+/* HEADER */
+header {
+  position:sticky; top:0; z-index:100;
+  background:rgba(3,8,5,.96);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  padding:0 20px;
+  height:52px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.logo-text { font-family:var(--mono); font-size:14px; font-weight:600; color:var(--green); }
+.logo-sub { font-family:var(--mono); font-size:8px; color:var(--text3); letter-spacing:3px; display:block; }
+.back-btn {
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text2);
+  text-decoration:none;
+  padding:5px 12px;
+  border:1px solid var(--border);
+  border-radius:3px;
+  transition:all .2s;
+}
+.back-btn:hover { border-color:var(--green); color:var(--green); }
+
+/* LAYOUT */
+.page {
+  max-width:780px;
+  margin:0 auto;
+  padding:32px 20px 80px;
+  position:relative;
+  z-index:1;
+}
+
+/* BREADCRUMB */
+.breadcrumb {
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text3);
+  margin-bottom:20px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+.breadcrumb a { color:var(--text3); text-decoration:none; }
+.breadcrumb a:hover { color:var(--green); }
+.breadcrumb .sep { opacity:.4; }
+
+/* ARTÍCULO HEADER */
+.art-cat {
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--green);
+  letter-spacing:3px;
+  text-transform:uppercase;
+  margin-bottom:14px;
+  display:inline-block;
+  background:rgba(0,230,100,.07);
+  padding:4px 10px;
+  border:1px solid rgba(0,230,100,.2);
+  border-radius:3px;
+}
+.art-titulo {
+  font-size:28px;
+  font-weight:600;
+  line-height:1.35;
+  color:#e4f5e6;
+  margin-bottom:16px;
+  animation:fadeUp .4s ease;
+}
+@media (max-width:600px) { .art-titulo { font-size:22px; } }
+
+.art-resumen {
+  font-size:15px;
+  color:var(--text2);
+  line-height:1.7;
+  margin-bottom:20px;
+  font-style:italic;
+  border-left:3px solid var(--green);
+  padding-left:16px;
+}
+.art-meta {
+  display:flex;
+  align-items:center;
+  gap:16px;
+  flex-wrap:wrap;
+  padding:12px 0;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  margin-bottom:24px;
+}
+.art-autor { font-family:var(--mono); font-size:11px; color:var(--text2); }
+.art-fecha { font-family:var(--mono); font-size:11px; color:var(--text3); }
+.art-vistas { font-family:var(--mono); font-size:11px; color:var(--text3); }
+.art-tags {
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-left:auto;
+}
+.tag {
+  font-family:var(--mono);
+  font-size:9px;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  color:var(--gold);
+  padding:2px 7px;
+  border-radius:2px;
+  letter-spacing:.5px;
+}
+
+/* IMAGEN */
+.art-imagen {
+  width:100%;
+  border-radius:4px;
+  display:block;
+  margin-bottom:28px;
+  border:1px solid var(--border);
+  max-height:420px;
+  object-fit:cover;
+}
+
+/* ANUNCIO */
+.ad-block {
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:12px;
+  margin:28px 0;
+  text-align:center;
+  min-height:90px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.ad-label {
+  font-family:var(--mono);
+  font-size:8px;
+  color:var(--text3);
+  letter-spacing:2px;
+  margin-bottom:6px;
+  text-align:center;
+}
+
+/* CONTENIDO */
+.art-body {
+  font-size:16px;
+  line-height:1.85;
+  color:#b8d8bb;
+  animation:fadeUp .4s ease .1s both;
+}
+.art-body h2 {
+  font-size:20px;
+  font-weight:600;
+  color:#d4e8d6;
+  margin:32px 0 14px;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+  font-family:var(--sans);
+}
+.art-body p {
+  margin-bottom:18px;
+  color:#b0d0b3;
+}
+.art-body p:first-child {
+  font-size:17px;
+  color:#c8e6cc;
+}
+.art-body strong { color:#d4e8d6; font-weight:600; }
+.art-body em { color:var(--gold); font-style:italic; }
+
+/* COMPARTIR */
+.share-bar {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin:32px 0 0;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+}
+.share-lbl { font-family:var(--mono); font-size:10px; color:var(--text3); letter-spacing:2px; }
+.share-btn {
+  font-family:var(--mono);
+  font-size:11px;
+  padding:6px 14px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text2);
+  border-radius:3px;
+  cursor:pointer;
+  text-decoration:none;
+  transition:all .2s;
+  display:inline-block;
+}
+.share-btn:hover { border-color:var(--green); color:var(--green); }
+
+/* ARTÍCULOS RELACIONADOS */
+.relacionados-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  border-radius:4px;
+  overflow:hidden;
+  margin-top:12px;
+}
+@media(max-width:600px){ .relacionados-grid { grid-template-columns:1fr; } }
+.rel-card {
+  background:var(--bg2);
+  padding:16px;
+  text-decoration:none;
+  color:inherit;
+  transition:background .2s;
+  display:block;
+}
+.rel-card:hover { background:var(--bg3); }
+.rel-cat { font-family:var(--mono); font-size:9px; color:var(--gold); letter-spacing:2px; margin-bottom:6px; }
+.rel-tit { font-size:12px; font-weight:600; color:#d4e8d6; line-height:1.45; }
+.rel-card:hover .rel-tit { color:var(--green); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+</style>
 </head>
-<body class="bg-[#0a0a0a] text-gray-200">
-    <nav class="p-6 border-b border-gray-800 bg-black">
-        <a href="/" class="text-blue-500 font-bold">← VOLVER AL INICIO</a>
-    </nav>
-    <main class="max-w-4xl mx-auto p-6">
-        <div id="contenido-noticia" class="mt-10">
-            <p class="text-center py-20">Cargando análisis del Toro... 🐂</p>
-        </div>
-        <div class="h-60 bg-[#111] border border-dashed border-gray-700 my-10 flex items-center justify-center text-xs text-gray-600">ANUNCIO ADSENSE DENTRO DE NOTICIA</div>
-    </main>
+<body>
 
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const slug = params.get('v');
+<header>
+  <a href="/" class="logo">
+    <span style="font-size:22px">🐂</span>
+    <div>
+      <span class="logo-text">FAROL TECH</span>
+      <span class="logo-sub">Tecnología & Economía · RD</span>
+    </div>
+  </a>
+  <a href="/" class="back-btn">← Portada</a>
+</header>
 
-        async function cargarDetalle() {
-            const res = await fetch(`/api/noticia/${slug}`);
-            const n = await res.json();
-            document.getElementById('contenido-noticia').innerHTML = `
-                <span class="text-blue-500 font-bold uppercase text-sm">${n.categoria}</span>
-                <h1 class="text-4xl font-extrabold text-white mt-2 leading-tight">${n.titulo}</h1>
-                <div class="mt-8 prose prose-invert max-w-none text-lg leading-relaxed">
-                    ${n.contenido_html}
-                </div>
-            `;
-            document.title = n.titulo + " | Farol Tech";
-        }
-        if(slug) cargarDetalle();
-    </script>
+<div class="page">
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="/">Inicio</a>
+    <span class="sep">/</span>
+    <span>{{CATEGORIA}}</span>
+    <span class="sep">/</span>
+    <span style="color:var(--text2)">{{TITULO}}</span>
+  </div>
+
+  <!-- CATEGORÍA -->
+  <span class="art-cat">{{CATEGORIA}}</span>
+
+  <!-- TÍTULO -->
+  <h1 class="art-titulo">{{TITULO}}</h1>
+
+  <!-- RESUMEN -->
+  <div class="art-resumen">{{RESUMEN}}</div>
+
+  <!-- META -->
+  <div class="art-meta">
+    <span class="art-autor">✍ {{AUTOR}}</span>
+    <span class="art-fecha">📅 {{FECHA}}</span>
+    <span class="art-vistas">👁 {{VISTAS}} lecturas</span>
+    <div class="art-tags" id="tags-wrap"></div>
+  </div>
+
+  <!-- IMAGEN -->
+  <img class="art-imagen" src="{{IMAGEN}}" alt="{{ALT}}" loading="eager">
+
+  <!-- ANUNCIO SUPERIOR -->
+  <div class="ad-label">PUBLICIDAD</div>
+  <div class="ad-block">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-{{ADSENSE_PUB}}"
+         data-ad-slot="1111111111"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- CONTENIDO -->
+  <article class="art-body">
+    {{CONTENIDO}}
+  </article>
+
+  <!-- ANUNCIO INFERIOR -->
+  <div class="ad-label" style="margin-top:28px">PUBLICIDAD</div>
+  <div class="ad-block">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-{{ADSENSE_PUB}}"
+         data-ad-slot="2222222222"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- COMPARTIR -->
+  <div class="share-bar">
+    <span class="share-lbl">COMPARTIR</span>
+    <a class="share-btn" id="share-tw" href="#" target="_blank" rel="noopener">𝕏 Twitter</a>
+    <a class="share-btn" id="share-fb" href="#" target="_blank" rel="noopener">f Facebook</a>
+    <a class="share-btn" id="share-wa" href="#" target="_blank" rel="noopener">📱 WhatsApp</a>
+    <button class="share-btn" onclick="copiarLink()">🔗 Copiar link</button>
+  </div>
+
+  <!-- RELACIONADOS -->
+  <div style="margin-top:40px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+      <span style="font-family:var(--mono);font-size:10px;letter-spacing:4px;color:var(--text3);text-transform:uppercase">Artículos relacionados</span>
+      <div style="flex:1;height:1px;background:var(--border)"></div>
+    </div>
+    <div class="relacionados-grid" id="relacionados">
+      <div style="grid-column:1/-1;padding:20px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--text3)">Cargando...</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Tags
+const tagsRaw = '{{TAGS}}';
+if (tagsRaw && tagsRaw.trim()) {
+  const wrap = document.getElementById('tags-wrap');
+  wrap.innerHTML = tagsRaw.split(',').slice(0,4).map(t =>
+    `<span class="tag">${t.trim()}</span>`
+  ).join('');
+}
+
+// Compartir
+const url   = window.location.href;
+const titulo = encodeURIComponent('{{TITULO}}');
+document.getElementById('share-tw').href = `https://twitter.com/intent/tweet?text=${titulo}&url=${encodeURIComponent(url)}&via=faroltech`;
+document.getElementById('share-fb').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+document.getElementById('share-wa').href = `https://api.whatsapp.com/send?text=${titulo}%20${encodeURIComponent(url)}`;
+
+function copiarLink() {
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = event.target;
+    btn.textContent = '✅ Copiado';
+    setTimeout(() => btn.textContent = '🔗 Copiar link', 2000);
+  });
+}
+
+// Relacionados
+async function cargarRelacionados() {
+  try {
+    const res  = await fetch('/api/articulos');
+    const data = await res.json();
+    const arts = (data.articulos || [])
+      .filter(a => a.slug !== '{{SLUG}}')
+      .slice(0, 3);
+    if (!arts.length) { document.getElementById('relacionados').innerHTML = '<div style="grid-column:1/-1;padding:16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--text3)">Sin artículos aún</div>'; return; }
+    document.getElementById('relacionados').innerHTML = arts.map(a =>
+      `<a class="rel-card" href="/articulo/${a.slug}">
+        <div class="rel-cat">${a.categoria}</div>
+        <div class="rel-tit">${a.titulo}</div>
+      </a>`
+    ).join('');
+  } catch(e) {}
+}
+cargarRelacionados();
+</script>
 </body>
 </html>
