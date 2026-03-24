@@ -690,34 +690,68 @@ app.get('/status', async (req, res) => {
 app.get('/articulo/:slug', async (req, res) => {
     try {
         const r = await pool.query("SELECT * FROM articulos WHERE slug=$1 AND estado='publicado'", [req.params.slug]);
-        if (!r.rows.length) return res.status(404).sendFile(path.join(__dirname, 'client', 'noticia.html'));
+
+        // 404 — nunca servir noticia.html crudo (tendría {{marcadores}} visibles)
+        if (!r.rows.length) {
+            return res.status(404).send(`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Artículo no encontrado — Farol Tech & Negocios</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#030805;color:#6b9b72;font-family:'IBM Plex Mono',monospace;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:20px}.box{max-width:400px}.code{font-size:64px;font-weight:600;color:#0d2410;line-height:1;margin-bottom:16px}.msg{font-size:14px;color:#3a5c3f;margin-bottom:24px}.back{display:inline-block;background:#00e664;color:#030805;padding:10px 24px;border-radius:3px;text-decoration:none;font-size:12px;font-weight:600}</style>
+</head><body><div class="box"><div class="code">404</div><div class="msg">Artículo no encontrado.<br>Puede haber sido eliminado o la URL es incorrecta.</div><a href="/" class="back">← Volver a portada</a></div></body></html>`);
+        }
+
         const a = r.rows[0];
         await pool.query('UPDATE articulos SET vistas=vistas+1 WHERE id=$1', [a.id]);
+
+        // Leer template y reemplazar TODOS los marcadores antes de enviar
+        let html;
         try {
-            let html = fs.readFileSync(path.join(__dirname, 'client', 'noticia.html'), 'utf8');
-            const urlA = `${BASE_URL}/articulo/${a.slug}`;
-            const fecha = new Date(a.fecha_publicacion).toLocaleDateString('es-DO',
-                { year:'numeric', month:'long', day:'numeric' });
-            html = html
-                .replace('<!-- META_TAGS -->', metaTags(a, urlA))
-                .replace(/\{\{TITULO\}\}/g,    esc(a.titulo))
-                .replace(/\{\{CONTENIDO\}\}/g, a.contenido_html || '')
-                .replace(/\{\{RESUMEN\}\}/g,   esc(a.resumen || ''))
-                .replace(/\{\{FECHA\}\}/g,     fecha)
-                .replace(/\{\{IMAGEN\}\}/g,    a.imagen || imagenLocal(a.categoria))
-                .replace(/\{\{ALT\}\}/g,       esc(a.imagen_alt || a.titulo))
-                .replace(/\{\{AUTOR\}\}/g,     esc(a.autor || 'Redacción FT'))
-                .replace(/\{\{CATEGORIA\}\}/g, esc(a.categoria))
-                .replace(/\{\{VISTAS\}\}/g,    a.vistas || 0)
-                .replace(/\{\{TAGS\}\}/g,      esc(a.tags || ''))
-                .replace(/\{\{SLUG\}\}/g,      esc(a.slug))
-                .replace(/\{\{URL\}\}/g,       encodeURIComponent(urlA))
-                .replace(/\{\{ADSENSE_PUB\}\}/g, ADSENSE_PUB);
-            res.setHeader('Content-Type', 'text/html;charset=utf-8');
-            res.setHeader('Cache-Control', 'public,max-age=300');
-            res.send(html);
-        } catch(e) { res.json(a); }
-    } catch (e) { res.status(500).send('Error'); }
+            html = fs.readFileSync(path.join(__dirname, 'client', 'noticia.html'), 'utf8');
+        } catch(e) {
+            // Si el archivo no existe, construir página mínima sin marcadores
+            console.error('❌ noticia.html no encontrado:', e.message);
+            return res.status(500).send(`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>${esc(a.titulo)}</title></head><body><h1>${esc(a.titulo)}</h1><div>${a.contenido_html||''}</div><a href="/">← Portada</a></body></html>`);
+        }
+
+        const urlA = `${BASE_URL}/articulo/${a.slug}`;
+        const fecha = new Date(a.fecha_publicacion).toLocaleDateString('es-DO',
+            { year:'numeric', month:'long', day:'numeric' });
+
+        // Reemplazar TODOS los marcadores — ninguno debe llegar al navegador
+        html = html
+            .replace('<!-- META_TAGS -->', metaTags(a, urlA))
+            .replace(/\{\{TITULO\}\}/g,      esc(a.titulo))
+            .replace(/\{\{CONTENIDO\}\}/g,   a.contenido_html || '')
+            .replace(/\{\{RESUMEN\}\}/g,     esc(a.resumen || ''))
+            .replace(/\{\{FECHA\}\}/g,       fecha)
+            .replace(/\{\{IMAGEN\}\}/g,      a.imagen || imagenLocal(a.categoria))
+            .replace(/\{\{ALT\}\}/g,         esc(a.imagen_alt || a.titulo))
+            .replace(/\{\{AUTOR\}\}/g,       esc(a.autor || 'Redacción FT'))
+            .replace(/\{\{CATEGORIA\}\}/g,   esc(a.categoria))
+            .replace(/\{\{VISTAS\}\}/g,      String(a.vistas || 0))
+            .replace(/\{\{TAGS\}\}/g,        esc(a.tags || ''))
+            .replace(/\{\{SLUG\}\}/g,        esc(a.slug))
+            .replace(/\{\{URL\}\}/g,         encodeURIComponent(urlA))
+            .replace(/\{\{ADSENSE_PUB\}\}/g, ADSENSE_PUB);
+
+        // Verificación de seguridad — si quedó algún {{...}} sin reemplazar, loguearlo
+        const sinReemplazar = html.match(/\{\{[A-Z_]+\}\}/g);
+        if (sinReemplazar) {
+            console.warn(`⚠️  Marcadores sin reemplazar en slug "${a.slug}":`, sinReemplazar);
+            // Limpiarlos para que el visitante no los vea
+            html = html.replace(/\{\{[A-Z_]+\}\}/g, '');
+        }
+
+        res.setHeader('Content-Type', 'text/html;charset=utf-8');
+        res.setHeader('Cache-Control', 'public,max-age=300');
+        res.send(html);
+
+    } catch (e) {
+        console.error('❌ ruta /articulo:', e.message);
+        res.status(500).send(`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Error — Farol Tech</title>
+<style>body{background:#030805;color:#6b9b72;font-family:monospace;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center}a{color:#00e664}</style>
+</head><body><div><p>Error cargando el artículo.</p><br><a href="/">← Volver a portada</a></div></body></html>`);
+    }
 });
 
 // ══════════════════════════════════════════════════════════
