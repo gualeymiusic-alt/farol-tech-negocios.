@@ -3,767 +3,491 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Farol Tech & Negocios — Tecnología y Economía · República Dominicana</title>
-<meta name="description" content="El portal líder de Tecnología y Economía de República Dominicana. Análisis, datos y tendencias para ejecutivos y emprendedores dominicanos.">
-<meta name="robots" content="index,follow">
-<link rel="canonical" href="https://faroltech.com/">
-<meta property="og:title" content="Farol Tech & Negocios — RD">
-<meta property="og:description" content="Tecnología y Economía para República Dominicana">
-<meta property="og:type" content="website">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
-
-<!-- Google AdSense -->
-<!-- AdSense — ID cargado dinámicamente desde /status para soportar múltiples proyectos -->
-<script>
-(async () => {
-  try {
-    const r = await fetch('/status');
-    const d = await r.json();
-    const pub = d.adsense || '';
-    if (!pub || pub.includes('XXXX')) return; // sin ID configurado aún
-    // Script principal de AdSense
-    const s = document.createElement('script');
-    s.async = true;
-    s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-' + pub;
-    s.crossOrigin = 'anonymous';
-    document.head.appendChild(s);
-    // Guardar pub ID globalmente para los bloques de anuncios
-    window._adsPub = 'ca-' + pub;
-  } catch(e) {}
-})();
-</script>
-
+<title>🐂 Farol Tech & Negocios — Tecnología y Economía RD</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:       #030805;
-  --bg2:      #060f07;
-  --bg3:      #0a180c;
-  --border:   #0d2410;
-  --border2:  #143318;
-  --green:    #00e664;
-  --green2:   #00b84e;
-  --green3:   #004d1f;
-  --gold:     #f0a500;
-  --gold2:    #c48200;
-  --text:     #c8e6cc;
-  --text2:    #6b9b72;
-  --text3:    #3a5c3f;
-  --red:      #ff4444;
-  --mono:     'IBM Plex Mono', monospace;
-  --sans:     'IBM Plex Sans', sans-serif;
+  --bg:    #030805;
+  --bg2:   #060f07;
+  --bg3:   #0a180c;
+  --border:#0d2410;
+  --green: #00ff66;
+  --green2:#00ff99;
+  --gold:  #ffaa00;
+  --red:   #ff3333;
+  --text:  #e0f0e0;
+  --text2: #88dd88;
+  --text3: #448844;
+  --mono:  'IBM Plex Mono', monospace;
+  --sans:  'IBM Plex Sans', sans-serif;
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }
+*{ margin:0; padding:0; box-sizing:border-box; }
 
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--sans);
-  min-height: 100vh;
-  overflow-x: hidden;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  min-height:100vh;
 }
 
-/* Grain overlay */
-body::before {
-  content:'';
-  position:fixed;
-  inset:0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events:none;
-  z-index:0;
-  opacity:.4;
-}
-
-/* TICKER */
-.ticker-wrap {
-  background: var(--bg3);
-  border-bottom: 1px solid var(--border);
-  padding: 7px 0;
-  overflow: hidden;
-  position: relative;
-  z-index: 10;
-}
-.ticker-inner {
-  display: flex;
-  gap: 40px;
-  animation: tickerMove 35s linear infinite;
-  white-space: nowrap;
-}
-.ticker-item {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text2);
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-.ticker-item .sym { color: var(--green); font-weight: 600; }
-.ticker-item .up  { color: var(--green); }
-.ticker-item .dn  { color: var(--red); }
-@keyframes tickerMove { from { transform: translateX(100vw); } to { transform: translateX(-100%); } }
-
-/* HEADER */
 header {
-  position: relative;
-  z-index: 10;
-  border-bottom: 1px solid var(--border);
-  background: rgba(3,8,5,.95);
-  backdrop-filter: blur(12px);
+  background:rgba(3,8,5,.95);
+  border-bottom:2px solid var(--green);
+  position:sticky;
+  top:0;
+  z-index:100;
+  padding:16px 20px;
 }
+
 .header-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 58px;
+  max-width:1200px;
+  margin:0 auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
 }
+
 .logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
 }
-.logo-bull {
-  font-size: 26px;
-  line-height: 1;
+
+.logo-emoji {
+  font-size:28px;
 }
-.logo-text {
-  font-family: var(--mono);
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--green);
-  letter-spacing: -0.3px;
+
+.logo-text h1 {
+  font-family:var(--mono);
+  font-size:16px;
+  color:var(--green);
+  line-height:1;
+  letter-spacing:1px;
+  margin-bottom:2px;
 }
-.logo-sub {
-  font-family: var(--mono);
-  font-size: 9px;
-  color: var(--text3);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  display: block;
+
+.logo-text p {
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text3);
+  letter-spacing:2px;
+  text-transform:uppercase;
 }
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+
+.header-nav {
+  display:flex;
+  gap:12px;
+  align-items:center;
 }
-.nav-link {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text2);
-  text-decoration: none;
-  letter-spacing: 1px;
-  transition: color .2s;
+
+.btn {
+  background:var(--bg2);
+  border:1px solid var(--border);
+  color:var(--text2);
+  padding:8px 16px;
+  border-radius:6px;
+  font-family:var(--mono);
+  font-size:11px;
+  cursor:pointer;
+  transition:all .2s;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
 }
-.nav-link:hover { color: var(--green); }
-.live-badge {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(0,230,100,.07);
-  border: 1px solid rgba(0,230,100,.2);
-  padding: 4px 10px;
-  border-radius: 3px;
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--green);
-  letter-spacing: 1px;
+
+.btn:hover {
+  border-color:var(--green);
+  color:var(--green);
+  background:var(--bg3);
+  box-shadow:0 0 12px #00ff6633;
 }
+
+.status {
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--green);
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
 .live-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--green);
-  animation: blink 1.4s infinite;
+  width:6px;
+  height:6px;
+  background:var(--green);
+  border-radius:50%;
+  animation:pulse 2s infinite;
 }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
 
-/* MAIN */
+@keyframes pulse {
+  0%,100% { opacity:1 }
+  50% { opacity:.3 }
+}
+
 main {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 28px 20px 60px;
-  position: relative;
-  z-index: 1;
+  max-width:1200px;
+  margin:0 auto;
+  padding:40px 20px;
 }
 
-/* HERO — Artículo destacado */
+/* HERO */
 .hero {
-  display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 2px;
-  border: 1px solid var(--border);
-  margin-bottom: 32px;
-  overflow: hidden;
-  border-radius: 4px;
-  animation: fadeUp .5s ease;
-}
-@media (max-width: 768px) { .hero { grid-template-columns: 1fr; } }
-
-.hero-img {
-  position: relative;
-  overflow: hidden;
-  min-height: 300px;
-  background: var(--bg3);
-}
-.hero-img img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform .6s ease;
-}
-.hero:hover .hero-img img { transform: scale(1.03); }
-.hero-img-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to right, rgba(3,8,5,.5) 0%, transparent 60%);
+  background:linear-gradient(135deg, rgba(0,255,102,.05) 0%, rgba(0,0,0,.3) 100%);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:40px;
+  margin-bottom:40px;
+  text-align:center;
 }
 
-.hero-body {
-  background: var(--bg2);
-  padding: 28px 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-left: 1px solid var(--border);
-}
-.hero-cat {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--green);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin-bottom: 14px;
-}
-.hero-titulo {
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 1.4;
-  color: #e8f5ea;
-  margin-bottom: 14px;
-  transition: color .2s;
-}
-.hero:hover .hero-titulo { color: var(--green); }
-.hero-resumen {
-  font-size: 13px;
-  line-height: 1.7;
-  color: var(--text2);
-  flex: 1;
-  margin-bottom: 20px;
-}
-.hero-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.hero-autor {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text3);
-}
-.btn-leer {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--green);
-  color: var(--bg);
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
-  padding: 8px 18px;
-  border-radius: 3px;
-  text-decoration: none;
-  letter-spacing: .5px;
-  transition: background .2s, transform .15s;
-}
-.btn-leer:hover { background: var(--green2); transform: translateY(-1px); }
-
-/* SECCIÓN TÍTULO */
-.sec-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-.sec-titulo {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 4px;
-  color: var(--text2);
-  text-transform: uppercase;
-}
-.sec-line {
-  flex: 1;
-  height: 1px;
-  background: var(--border);
+.hero h2 {
+  font-size:28px;
+  margin-bottom:12px;
+  color:var(--green);
+  font-weight:400;
 }
 
-/* GRID DE ARTÍCULOS */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 32px;
-}
-@media (max-width: 900px) { .grid { grid-template-columns: repeat(2,1fr); } }
-@media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
-
-.card {
-  background: var(--bg2);
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transition: background .2s;
-  cursor: pointer;
-  text-decoration: none;
-  color: inherit;
-}
-.card:hover { background: var(--bg3); }
-.card-img {
-  width: 100%;
-  height: 130px;
-  object-fit: cover;
-  border-radius: 2px;
-  display: block;
-}
-.card-cat {
-  font-family: var(--mono);
-  font-size: 9px;
-  color: var(--gold);
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-}
-.card-titulo {
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.45;
-  color: #d4e8d6;
-  transition: color .2s;
-}
-.card:hover .card-titulo { color: var(--green); }
-.card-resumen {
-  font-size: 12px;
-  color: var(--text2);
-  line-height: 1.6;
-  flex: 1;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.card-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: auto;
-  padding-top: 8px;
-  border-top: 1px solid var(--border);
-}
-.card-fecha {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--text3);
-}
-.card-vistas {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--text3);
+.hero p {
+  font-size:14px;
+  color:var(--text2);
+  margin-bottom:20px;
+  line-height:1.6;
 }
 
-/* CATEGORÍAS TABS */
-.cats {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-.cat-btn {
-  font-family: var(--mono);
-  font-size: 10px;
-  padding: 5px 12px;
-  border: 1px solid var(--border2);
-  background: transparent;
-  color: var(--text2);
-  border-radius: 3px;
-  cursor: pointer;
-  letter-spacing: .5px;
-  transition: all .2s;
-}
-.cat-btn:hover, .cat-btn.active {
-  background: rgba(0,230,100,.08);
-  border-color: var(--green);
-  color: var(--green);
+.hero-btn {
+  background:var(--green);
+  color:var(--bg);
+  border:none;
+  padding:12px 28px;
+  border-radius:6px;
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all .2s;
+  display:inline-block;
 }
 
-/* ANUNCIO AdSense */
-.ad-wrap {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 12px;
-  margin-bottom: 28px;
-  text-align: center;
-  min-height: 90px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.ad-label {
-  font-family: var(--mono);
-  font-size: 9px;
-  color: var(--text3);
-  letter-spacing: 2px;
-  text-align: center;
-  margin-bottom: 8px;
+.hero-btn:hover {
+  background:var(--green2);
+  box-shadow:0 0 20px #00ff6655;
+  transform:translateY(-2px);
 }
 
-/* STATS BAR */
-.stats-bar {
-  display: flex;
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 28px;
-  animation: fadeUp .6s ease .1s both;
-}
-.stat {
-  flex: 1;
-  background: var(--bg2);
-  padding: 14px 16px;
-  text-align: center;
-}
-.stat-val {
-  font-family: var(--mono);
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--green);
-  line-height: 1;
-  margin-bottom: 4px;
-}
-.stat-lbl {
-  font-family: var(--mono);
-  font-size: 9px;
-  color: var(--text3);
-  letter-spacing: 2px;
-  text-transform: uppercase;
+/* GRID ARTÍCULOS */
+.articulos {
+  margin-bottom:40px;
 }
 
-/* LOADER */
-.loader-wrap {
-  display: flex;
-  justify-content: center;
-  padding: 40px;
+.sec-title {
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--text3);
+  text-transform:uppercase;
+  letter-spacing:3px;
+  margin-bottom:20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
-.spinner {
-  width: 24px; height: 24px;
-  border: 2px solid var(--border2);
-  border-top-color: var(--green);
-  border-radius: 50%;
-  animation: spin .8s linear infinite;
+
+.badge {
+  background:var(--bg2);
+  border:1px solid var(--border);
+  padding:4px 12px;
+  border-radius:20px;
+  font-size:10px;
+  color:var(--green);
 }
-@keyframes spin { to { transform: rotate(360deg); } }
-@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+.grid-arts {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+  gap:16px;
+}
+
+.art-card {
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  overflow:hidden;
+  transition:all .3s;
+  cursor:pointer;
+}
+
+.art-card:hover {
+  border-color:var(--green);
+  box-shadow:0 0 12px #00ff6633;
+  transform:translateY(-4px);
+}
+
+.art-img {
+  width:100%;
+  height:150px;
+  background:var(--bg3);
+  object-fit:cover;
+}
+
+.art-body {
+  padding:14px;
+}
+
+.art-cat {
+  display:inline-block;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  color:var(--green2);
+  padding:2px 8px;
+  border-radius:3px;
+  font-family:var(--mono);
+  font-size:8px;
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+
+.art-title {
+  font-size:13px;
+  font-weight:500;
+  color:var(--text);
+  margin-bottom:6px;
+  line-height:1.4;
+}
+
+.art-meta {
+  display:flex;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:9px;
+  color:var(--text3);
+}
+
+/* CATEGORÍAS */
+.cats-sec {
+  margin-bottom:40px;
+}
+
+.grid-cats {
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
+  gap:12px;
+}
+
+.cat-tile {
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:20px;
+  text-align:center;
+  cursor:pointer;
+  transition:all .2s;
+  text-decoration:none;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+}
+
+.cat-tile:hover {
+  border-color:var(--green);
+  background:var(--bg3);
+  box-shadow:0 0 12px #00ff6633;
+}
+
+.cat-emoji {
+  font-size:28px;
+}
+
+.cat-name {
+  font-size:12px;
+  color:var(--text2);
+  font-weight:500;
+}
 
 /* FOOTER */
 footer {
-  border-top: 1px solid var(--border);
-  background: var(--bg2);
-  padding: 24px 20px;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-.footer-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-.footer-brand {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--green);
-}
-.footer-links {
-  display: flex;
-  gap: 20px;
-}
-.footer-links a {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--text3);
-  text-decoration: none;
-  letter-spacing: .5px;
-}
-.footer-links a:hover { color: var(--green); }
-.footer-copy {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--text3);
-  width: 100%;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
-  text-align: center;
+  background:var(--bg2);
+  border-top:1px solid var(--border);
+  padding:20px;
+  text-align:center;
+  color:var(--text3);
+  font-family:var(--mono);
+  font-size:10px;
+  margin-top:40px;
 }
 
-/* Empty state */
-.empty {
-  text-align: center;
-  padding: 60px 20px;
-  font-family: var(--mono);
-  font-size: 13px;
-  color: var(--text3);
+.loading {
+  display:inline-block;
+  width:10px;
+  height:10px;
+  border:2px solid var(--border);
+  border-top-color:var(--green);
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform:rotate(360deg); }
+}
+
+#toast {
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:var(--bg2);
+  border:1px solid var(--green);
+  color:var(--text);
+  padding:12px 20px;
+  border-radius:6px;
+  font-family:var(--mono);
+  font-size:11px;
+  display:none;
+  z-index:999;
+}
+
+@media(max-width:768px) {
+  .header-inner {
+    flex-direction:column;
+    gap:12px;
+  }
+  .logo h1 { font-size:14px; }
+  .hero { padding:20px; }
+  .hero h2 { font-size:20px; }
+  .grid-arts { grid-template-columns:1fr; }
 }
 </style>
 </head>
 <body>
 
-<!-- TICKER -->
-<div class="ticker-wrap">
-  <div class="ticker-inner" id="ticker">
-    <span class="ticker-item"><span class="sym">USD/DOP</span> <span class="up">58.42 ▲0.12%</span></span>
-    <span class="ticker-item"><span class="sym">S&P 500</span> <span class="up">5,842.3 ▲0.31%</span></span>
-    <span class="ticker-item"><span class="sym">BTC</span> <span class="up">$84,210 ▲1.8%</span></span>
-    <span class="ticker-item"><span class="sym">NASDAQ</span> <span class="up">18,940 ▲0.52%</span></span>
-    <span class="ticker-item"><span class="sym">PETRÓLEO WTI</span> <span class="dn">$76.40 ▼0.4%</span></span>
-    <span class="ticker-item"><span class="sym">ORO</span> <span class="up">$2,312 ▲0.6%</span></span>
-    <span class="ticker-item"><span class="sym">INFLACIÓN RD</span> 4.2% anual</span>
-    <span class="ticker-item"><span class="sym">PIB RD</span> +5.1% 2025</span>
-    <span class="ticker-item"><span class="sym">REMESAS RD</span> $10.8B ▲6%</span>
-    <span class="ticker-item"><span class="sym">USD/DOP</span> <span class="up">58.42 ▲0.12%</span></span>
-    <span class="ticker-item"><span class="sym">S&P 500</span> <span class="up">5,842.3 ▲0.31%</span></span>
-  </div>
-</div>
-
-<!-- HEADER -->
 <header>
   <div class="header-inner">
     <a href="/" class="logo">
-      <span class="logo-bull">🐂</span>
-      <div>
-        <span class="logo-text">FAROL TECH</span>
-        <span class="logo-sub">Tecnología & Economía · RD</span>
+      <div class="logo-emoji">🐂</div>
+      <div class="logo-text">
+        <h1>FAROL TECH</h1>
+        <p>Tech + Economía · RD</p>
       </div>
     </a>
-    <div class="header-right">
-      <a href="#tecnologia" class="nav-link">TECH</a>
-      <a href="#economia" class="nav-link">ECONOMÍA</a>
-      <a href="#mercados" class="nav-link">MERCADOS</a>
-      <div class="live-badge"><span class="live-dot"></span>EN VIVO</div>
+    
+    <div class="header-nav">
+      <div class="status">
+        <div class="live-dot"></div>
+        <span>Online</span>
+      </div>
+      <a href="/redaccion" class="btn">✍️ Redacción</a>
+      <a href="/status" class="btn">📊 Status</a>
     </div>
   </div>
 </header>
 
 <main>
 
-  <!-- STATS -->
-  <div class="stats-bar" id="stats-bar">
-    <div class="stat"><div class="stat-val" id="st-total">—</div><div class="stat-lbl">Artículos</div></div>
-    <div class="stat"><div class="stat-val" id="st-vistas">—</div><div class="stat-lbl">Lecturas</div></div>
-    <div class="stat"><div class="stat-val" id="st-cats">6</div><div class="stat-lbl">Secciones</div></div>
-    <div class="stat"><div class="stat-val" style="color:var(--gold)">24/7</div><div class="stat-lbl">Automatizado</div></div>
-  </div>
+<!-- HERO -->
+<section class="hero">
+  <h2>Tecnología & Economía en República Dominicana</h2>
+  <p>Artículos generados automáticamente con IA · Gemini 2.5 Flash · Actualizado cada hora</p>
+  <button class="hero-btn" onclick="window.location.href='/redaccion'">📝 Ir al Panel</button>
+</section>
 
-  <!-- ANUNCIO SUPERIOR -->
-  <div>
-    <div class="ad-label">PUBLICIDAD</div>
-    <div class="ad-wrap">
-      <div id="ad-top" style="min-height:90px;display:flex;align-items:center;justify-content:center"></div>
-      <script>
-      (function(){ const t=setInterval(()=>{if(!window._adsPub)return; clearInterval(t);
-        const d=document.getElementById('ad-top');
-        d.innerHTML='<ins class="adsbygoogle" style="display:block" data-ad-client="'+window._adsPub+'" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>';
-        try{(adsbygoogle=window.adsbygoogle||[]).push({});}catch(e){}
-      },300); setTimeout(()=>clearInterval(t),8000); })();
-      </script>
+<!-- ARTÍCULOS RECIENTES -->
+<section class="articulos">
+  <div class="sec-title">
+    Artículos publicados
+    <span class="badge" id="badge-count">—</span>
+  </div>
+  <div class="grid-arts" id="lista-arts">
+    <div style="text-align:center;padding:40px;color:var(--text3);grid-column:1/-1">
+      <div class="loading"></div>
+      <p style="margin-top:10px;font-family:var(--mono);font-size:11px">Cargando artículos...</p>
     </div>
   </div>
+</section>
 
-  <!-- DESTACADO -->
-  <div class="sec-header">
-    <span class="sec-titulo">Destacado</span>
-    <div class="sec-line"></div>
+<!-- CATEGORÍAS -->
+<section class="cats-sec">
+  <div class="sec-title">Categorías</div>
+  <div class="grid-cats">
+    <a href="#" class="cat-tile" data-cat="Tecnología RD">
+      <div class="cat-emoji">🖥️</div>
+      <div class="cat-name">Tecnología RD</div>
+    </a>
+    <a href="#" class="cat-tile" data-cat="Economía RD">
+      <div class="cat-emoji">📊</div>
+      <div class="cat-name">Economía RD</div>
+    </a>
+    <a href="#" class="cat-tile" data-cat="Finanzas Personales">
+      <div class="cat-emoji">💳</div>
+      <div class="cat-name">Finanzas</div>
+    </a>
+    <a href="#" class="cat-tile" data-cat="Startups & Emprendimiento">
+      <div class="cat-emoji">🚀</div>
+      <div class="cat-name">Startups</div>
+    </a>
+    <a href="#" class="cat-tile" data-cat="Mercados Internacionales">
+      <div class="cat-emoji">🌐</div>
+      <div class="cat-name">Mercados</div>
+    </a>
+    <a href="#" class="cat-tile" data-cat="Innovación & Futuro">
+      <div class="cat-emoji">⚡</div>
+      <div class="cat-name">Innovación</div>
+    </a>
   </div>
-  <div id="hero-wrap">
-    <div class="loader-wrap"><div class="spinner"></div></div>
-  </div>
-
-  <!-- FILTROS CATEGORÍA -->
-  <div class="sec-header" style="margin-top:28px">
-    <span class="sec-titulo">Todas las noticias</span>
-    <div class="sec-line"></div>
-  </div>
-  <div class="cats" id="cats">
-    <button class="cat-btn active" onclick="filtrar(null,this)">Todas</button>
-    <button class="cat-btn" onclick="filtrar('Tecnología RD',this)">🖥 Tech RD</button>
-    <button class="cat-btn" onclick="filtrar('Economía RD',this)">📊 Economía</button>
-    <button class="cat-btn" onclick="filtrar('Finanzas Personales',this)">💳 Finanzas</button>
-    <button class="cat-btn" onclick="filtrar('Startups & Emprendimiento',this)">🚀 Startups</button>
-    <button class="cat-btn" onclick="filtrar('Mercados Internacionales',this)">🌐 Mercados</button>
-    <button class="cat-btn" onclick="filtrar('Innovación & Futuro',this)">⚡ Innovación</button>
-  </div>
-
-  <!-- GRID -->
-  <div class="grid" id="grid-articulos">
-    <div style="grid-column:1/-1"><div class="loader-wrap"><div class="spinner"></div></div></div>
-  </div>
-
-  <!-- ANUNCIO MEDIO -->
-  <div>
-    <div class="ad-label">PUBLICIDAD</div>
-    <div class="ad-wrap">
-      <div id="ad-mid" style="min-height:90px;display:flex;align-items:center;justify-content:center"></div>
-      <script>
-      (function(){ const t=setInterval(()=>{if(!window._adsPub)return; clearInterval(t);
-        const d=document.getElementById('ad-mid');
-        d.innerHTML='<ins class="adsbygoogle" style="display:block" data-ad-client="'+window._adsPub+'" data-ad-slot="0987654321" data-ad-format="auto" data-full-width-responsive="true"></ins>';
-        try{(adsbygoogle=window.adsbygoogle||[]).push({});}catch(e){}
-      },300); setTimeout(()=>clearInterval(t),8000); })();
-      </script>
-    </div>
-  </div>
+</section>
 
 </main>
 
 <footer>
-  <div class="footer-inner">
-    <div class="footer-brand">🐂 FAROL TECH & NEGOCIOS</div>
-    <div class="footer-links">
-      <a href="/sitemap.xml">Sitemap</a>
-      <a href="/robots.txt">Robots</a>
-      <a href="/ads.txt">Ads.txt</a>
-    </div>
-    <div class="footer-copy">
-      © 2026 Farol Tech & Negocios · faroltech.com · Tecnología y Economía para República Dominicana · Contenido generado con IA · Gemini 2.5 Flash
-    </div>
-  </div>
+  <p>🐂 Farol Tech & Negocios — V2.0 · Generado con IA Gemini</p>
 </footer>
 
+<div id="toast"></div>
+
 <script>
-let todosLosArticulos = [];
-
-function fmt(v) {
-  if (!v) return '0';
-  if (v >= 1000000) return (v/1000000).toFixed(1)+'M';
-  if (v >= 1000) return (v/1000).toFixed(1)+'k';
-  return String(v);
-}
-
-function tiempoRelativo(fecha) {
-  const min = Math.round((Date.now() - new Date(fecha)) / 60000);
-  if (min < 1)  return 'ahora';
-  if (min < 60) return min + 'min';
-  const h = Math.floor(min/60);
-  if (h < 24) return h + 'h';
-  return Math.floor(h/24) + 'd';
-}
-
-function cardHTML(a) {
-  const img = a.imagen || `https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&w=900`;
-  return `<a class="card" href="/articulo/${a.slug}">
-    <img class="card-img" src="${img}" alt="${escHtml(a.imagen_alt||a.titulo)}" loading="lazy" onerror="this.src='${img}'">
-    <div class="card-cat">${escHtml(a.categoria)}</div>
-    <div class="card-titulo">${escHtml(a.titulo)}</div>
-    <div class="card-resumen">${escHtml(a.resumen||'')}</div>
-    <div class="card-meta">
-      <span class="card-fecha">${tiempoRelativo(a.fecha_publicacion)}</span>
-      <span class="card-vistas">${fmt(a.vistas)} lecturas</span>
-    </div>
-  </a>`;
-}
-
-function escHtml(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-function renderHero(a) {
-  const img = a.imagen || `https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&w=900`;
-  document.getElementById('hero-wrap').innerHTML = `
-    <a href="/articulo/${a.slug}" style="text-decoration:none;color:inherit;display:block">
-      <div class="hero">
-        <div class="hero-img">
-          <img src="${img}" alt="${escHtml(a.imagen_alt||a.titulo)}" loading="eager" onerror="this.src='${img}'">
-          <div class="hero-img-overlay"></div>
-        </div>
-        <div class="hero-body">
-          <div>
-            <div class="hero-cat">${escHtml(a.categoria)}</div>
-            <div class="hero-titulo">${escHtml(a.titulo)}</div>
-            <div class="hero-resumen">${escHtml(a.resumen||'')}</div>
-          </div>
-          <div class="hero-meta">
-            <span class="hero-autor">Por ${escHtml(a.autor||'Redacción FT')} · ${tiempoRelativo(a.fecha_publicacion)}</span>
-            <span class="btn-leer">Leer análisis →</span>
-          </div>
-        </div>
-      </div>
-    </a>`;
-}
-
-function renderGrid(articulos) {
-  const grid = document.getElementById('grid-articulos');
-  if (!articulos.length) {
-    grid.innerHTML = '<div class="empty" style="grid-column:1/-1">[ Sin artículos en esta categoría aún ]</div>';
-    return;
-  }
-  grid.innerHTML = articulos.map(cardHTML).join('');
-}
-
-function filtrar(cat, btn) {
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  const filtrados = cat ? todosLosArticulos.filter(a => a.categoria === cat) : todosLosArticulos;
-  renderGrid(filtrados);
-}
-
-async function cargar() {
+async function cargarArticulos() {
   try {
     const res = await fetch('/api/articulos');
     const data = await res.json();
-    const arts = data.articulos || [];
-    todosLosArticulos = arts;
-
-    // Hero
-    if (arts.length) renderHero(arts[0]);
-    else document.getElementById('hero-wrap').innerHTML = '<div class="empty">[ Generando primer artículo... ]</div>';
-
-    // Grid (sin el hero)
-    renderGrid(arts.slice(1));
-
-  } catch (e) {
-    document.getElementById('grid-articulos').innerHTML = '<div class="empty" style="grid-column:1/-1">[ Error cargando artículos ]</div>';
+    
+    if (!data.ok || !data.articulos?.length) {
+      document.getElementById('lista-arts').innerHTML = 
+        '<p style="text-align:center;padding:40px;color:var(--text3);grid-column:1/-1;font-family:var(--mono);font-size:11px">Sin artículos aún</p>';
+      document.getElementById('badge-count').textContent = '0';
+      return;
+    }
+    
+    document.getElementById('badge-count').textContent = data.articulos.length;
+    document.getElementById('lista-arts').innerHTML = data.articulos.slice(0, 12).map(a => `
+      <div class="art-card" onclick="window.location.href='/articulo/${a.slug}'">
+        <img src="${a.imagen}" alt="${a.imagen_alt}" class="art-img" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22280%22 height=%22150%22%3E%3Crect fill=%22%230a180c%22 width=%22280%22 height=%22150%22/%3E%3C/svg%3E'">
+        <div class="art-body">
+          <span class="art-cat">${a.categoria}</span>
+          <div class="art-title">${a.titulo}</div>
+          <div class="art-meta">
+            <span>📖 ${a.vistas || 0}</span>
+            <span>${tiempoRel(a.fecha_publicacion)}</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  } catch(e) {
+    console.error('Error cargando:', e);
   }
 }
 
-async function cargarStats() {
-  try {
-    const res  = await fetch('/api/estadisticas');
-    const data = await res.json();
-    document.getElementById('st-total').textContent  = fmt(data.total);
-    document.getElementById('st-vistas').textContent = fmt(data.vistas);
-  } catch(e) {}
+function tiempoRel(fecha) {
+  const min = Math.round((Date.now() - new Date(fecha)) / 60000);
+  if (min < 1) return 'ahora';
+  if (min < 60) return min + 'min';
+  const h = Math.floor(min / 60);
+  return h < 24 ? h + 'h' : Math.floor(h / 24) + 'd';
 }
 
-cargar();
-cargarStats();
-// Actualizar cada 5 minutos
-setInterval(() => { cargar(); cargarStats(); }, 300000);
+cargarArticulos();
+setInterval(cargarArticulos, 60000);
 </script>
 </body>
 </html>
