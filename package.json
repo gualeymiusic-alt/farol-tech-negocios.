@@ -1,14 +1,14 @@
 {
   "name": "farol-tech-negocios",
-  "version": "1.0.0",
-  "description": "Portal Pro de Tecnología y Negocios - Farol Tech",
+  "version": "2.0.0",
+  "description": "Diario Digital Automatizado - Tecnología y Economía RD",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "@google/generative-ai": "^0.1.1",
+    "@google/generative-ai": "^0.21.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "pg": "^8.11.3"
