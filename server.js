@@ -47,7 +47,7 @@ if (GEMINI_KEYS.length === 0) {
 
 let slotActual = 0;
 let ultimoTiempoGemini = 0;
-const DELAY_ENTRE_KEYS = 60000; // 60 segundos
+const DELAY_ENTRE_KEYS = 120000; //120 segundos (2 minutos)
 
 // MIDDLEWARE
 app.use(express.json({ limit: '50mb' }));
